@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-api
+  template:
+    metadata:
+      labels:
+        app: bank-api
+    spec:
+      containers:
+        - name: bank-api
+          image: us-east4-docker.pkg.dev/gcp-class-14/omar-bank-gke-repo/bank-api-gke:latest
+          ports:
+            - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-api-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: bank-api
+  ports:
+    - port: 80
+      targetPort: 8080
